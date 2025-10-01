@@ -44,5 +44,10 @@ namespace FossPDF.Infrastructure
         {
             return Locations.Find(x => x.Name == name);
         }
+
+        public int GetPageNumbers()
+        {
+            return Locations.Max(x => x.PageEnd);
+        }
     }
 }

@@ -12,20 +12,30 @@ namespace FossPDF.Fluent
         
         public static byte[] GeneratePdf(this IDocument document)
         {
+            return document.GeneratePdf(out var _);
+        }
+
+        public static byte[] GeneratePdf(this IDocument document, out int totalPages)
+        {
             using var stream = new MemoryStream();
-            document.GeneratePdf(stream);
+            totalPages = DocumentGenerator.GeneratePdf(stream, document);
             return stream.ToArray();
         }
         
         public static void GeneratePdf(this IDocument document, string filePath)
         {
-            using var stream = new FileStream(filePath, FileMode.Create);
-            document.GeneratePdf(stream);
+            var data = document.GeneratePdf();
+            
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+            
+            File.WriteAllBytes(filePath, data);
         }
 
         public static void GeneratePdf(this IDocument document, Stream stream)
         {
-            DocumentGenerator.GeneratePdf(stream, document);
+            var data = document.GeneratePdf();
+            stream.Write(data, 0, data.Length);
         }
         
         #endregion

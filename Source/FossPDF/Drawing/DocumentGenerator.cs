@@ -20,14 +20,14 @@ namespace FossPDF.Drawing
         {
             NativeDependencyCompatibilityChecker.Test();
         }
-
-        internal static void GeneratePdf(Stream stream, IDocument document)
+        
+        internal static int GeneratePdf(Stream stream, IDocument document)
         {
             CheckIfStreamIsCompatible(stream);
 
             var metadata = document.GetMetadata();
             var canvas = new PdfCanvas(stream, metadata);
-            RenderDocument(canvas, document);
+            return RenderDocument(canvas, document);
         }
 
         internal static void GenerateXps(Stream stream, IDocument document)
@@ -72,7 +72,7 @@ namespace FossPDF.Drawing
             return canvas.Pictures;
         }
 
-        internal static void RenderDocument<TCanvas>(TCanvas canvas, IDocument document)
+        internal static int RenderDocument<TCanvas>(TCanvas canvas, IDocument document)
             where TCanvas : ICanvas, IRenderingCanvas
         {
             var container = new DocumentContainer();
@@ -114,6 +114,8 @@ namespace FossPDF.Drawing
 
             RenderPass(pageContext, canvas, content, debuggingState);
             pageContext.FontManager.DisposeAll();
+
+            return pageContext.GetPageNumbers();
         }
 
         private static void ProcessElementPrepareForSubsetting(Element? el,
