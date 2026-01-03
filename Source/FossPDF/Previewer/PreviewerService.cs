@@ -15,18 +15,18 @@ namespace FossPDF.Previewer
     {
         private int Port { get; }
         private HttpClient HttpClient { get; }
-        
+
         public  event Action? OnPreviewerStopped;
 
-        private const int RequiredPreviewerVersionMajor = 2022;
-        private const int RequiredPreviewerVersionMinor = 12;
-        
+        private const int RequiredPreviewerVersionMajor = 2026;
+        private const int RequiredPreviewerVersionMinor = 1;
+
         public PreviewerService(int port)
         {
             Port = port;
             HttpClient = new()
             {
-                BaseAddress = new Uri($"http://localhost:{port}/"), 
+                BaseAddress = new Uri($"http://localhost:{port}/"),
                 Timeout = TimeSpan.FromSeconds(1)
             };
         }
@@ -40,7 +40,7 @@ namespace FossPDF.Previewer
                 StartPreviewer();
                 await WaitForConnection();
             }
-            
+
             var previewerVersion = await GetPreviewerVersion();
             CheckVersionCompatibility(previewerVersion);
         }
@@ -57,13 +57,13 @@ namespace FossPDF.Previewer
                 return false;
             }
         }
-        
+
         private async Task<Version> GetPreviewerVersion()
         {
             using var result = await HttpClient.GetAsync("/version");
             return await result.Content.ReadFromJsonAsync<Version>();
         }
-        
+
         private void StartPreviewer()
         {
             try
@@ -78,7 +78,7 @@ namespace FossPDF.Previewer
                         CreateNoWindow = true
                     }
                 };
-                
+
                 process.Start();
 
                 Task.Run(async () =>
@@ -99,19 +99,19 @@ namespace FossPDF.Previewer
         {
             if (version.Major == RequiredPreviewerVersionMajor && version.Minor == RequiredPreviewerVersionMinor)
                 return;
-            
+
             throw new Exception($"Previewer version is not compatible. Possible solutions: " +
                                 $"1) Update the FossPDF library to newer version. " +
                                 $"2) Update the FossPDF previewer tool using the following command: 'dotnet tool update --global FossPDF.Previewer --version {RequiredPreviewerVersionMajor}.{RequiredPreviewerVersionMinor}'");
         }
-        
+
         private async Task WaitForConnection()
         {
             using var cancellationTokenSource = new CancellationTokenSource();
             cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
-            
-            var cancellationToken = cancellationTokenSource.Token; 
-            
+
+            var cancellationToken = cancellationTokenSource.Token;
+
             while (true)
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(250));
@@ -125,13 +125,13 @@ namespace FossPDF.Previewer
                     break;
             }
         }
-        
+
         public async Task RefreshPreview(ICollection<PreviewerPicture> pictures)
         {
             using var multipartContent = new MultipartFormDataContent();
 
             var pages = new List<PreviewerRefreshCommand.Page>();
-            
+
             foreach (var picture in pictures)
             {
                 var page = new PreviewerRefreshCommand.Page
@@ -139,7 +139,7 @@ namespace FossPDF.Previewer
                     Width = picture.Size.Width,
                     Height = picture.Size.Height
                 };
-                
+
                 pages.Add(page);
 
                 var pictureStream = picture.Picture.Serialize().AsStream();
@@ -150,7 +150,7 @@ namespace FossPDF.Previewer
             {
                 Pages = pages
             };
-            
+
             multipartContent.Add(JsonContent.Create(command), "command");
 
             using var _ = await HttpClient.PostAsync("/update/preview", multipartContent);

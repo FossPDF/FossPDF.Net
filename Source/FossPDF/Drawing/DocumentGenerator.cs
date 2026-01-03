@@ -20,7 +20,7 @@ namespace FossPDF.Drawing
         {
             NativeDependencyCompatibilityChecker.Test();
         }
-        
+
         internal static int GeneratePdf(Stream stream, IDocument document)
         {
             CheckIfStreamIsCompatible(stream);
