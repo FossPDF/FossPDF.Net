@@ -23,6 +23,7 @@ namespace FossPDF.Drawing
         public ConcurrentDictionary<TextStyle, TextShaper> TextShapers { get; init; } // contains unmanaged refs, but disposed using above
         public Action<DocumentSpecificFontManager, IEnumerable<FontToBeSubset>>? SubsetCallback { get; init; }
 
+        // Crucially, DOESN'T contain stuff we inherit from the global FontManager:
         public ConcurrentBag<IDisposable> SafeToDisposeAtSubsetTime { get; init; } = new();
 
         public void ClearCacheReadyForSubsets()
@@ -255,10 +256,10 @@ namespace FossPDF.Drawing
             {
                 var typeface = ToFont(key).Typeface;
 
-                using var typefaceStream = typeface.OpenStream(out var ttcIndex);
-                using var harfBuzzBlob = typefaceStream.ToHarfBuzzBlob();
+                var typefaceStream = typeface.OpenStream(out var ttcIndex);
+                var harfBuzzBlob = typefaceStream.ToHarfBuzzBlob();
 
-                using var face = new Face(harfBuzzBlob, ttcIndex)
+                var face = new Face(harfBuzzBlob, ttcIndex)
                 {
                     Index = ttcIndex,
                     UnitsPerEm = typeface.UnitsPerEm,
@@ -267,6 +268,9 @@ namespace FossPDF.Drawing
 
                 var font = new Font(face);
                 SafeToDisposeAtSubsetTime.Add(font);
+                SafeToDisposeAtSubsetTime.Add(face);
+                SafeToDisposeAtSubsetTime.Add(harfBuzzBlob);
+                SafeToDisposeAtSubsetTime.Add(typefaceStream);
                 font.SetScale(TextShaper.FontShapingScale, TextShaper.FontShapingScale);
                 font.SetFunctionsOpenType();
 
@@ -281,9 +285,6 @@ namespace FossPDF.Drawing
 
         public SKFont ToFont(TextStyle style)
         {
-            var thisDocumentSpecificFontManager = this;
-            // get memory address of thisDocumentSpecificFontManager
-
             return Fonts.GetOrAdd(style, key =>
             {
                 #pragma warning disable IDISP001
@@ -294,34 +295,9 @@ namespace FossPDF.Drawing
             });
         }
 
-        public void DisposeAll(bool includeStyleSets=true)
+        public void DisposeDocumentSpecificObjects()
         {
-            foreach (var paint in FontPaints.Values)
-            {
-                paint.Dispose();
-            }
-
-            foreach (var font in Fonts.Values)
-            {
-                font.Typeface.Dispose();
-                font.Dispose();
-            }
-
-            foreach (var shaperFont in ShaperFonts.Values)
-            {
-                shaperFont.Dispose();
-            }
-
-            if (includeStyleSets)
-            {
-                foreach (var styleSet in StyleSets.Values)
-                {
-                    styleSet.Dispose();
-                }
-            }
-
             ClearCacheReadyForSubsets();
-
         }
     }
 }

@@ -191,9 +191,6 @@ namespace FossPDF.Drawing
                     if (glyph.Position.X + glyph.Width >
                         maxWidth + Size.Epsilon + totalAdjust)
                     {
-                        // Console.WriteLine("Glyph with ID " + glyph.Codepoint + " and index " + index + " at " + (glyph.Position.X + glyph.Width) +
-                        //                   " is too wide to fit in the available space (" + maxWidth + " plus " +
-                        //                   totalAdjust + " = " + (maxWidth + totalAdjust) + ")");
                         break;
                     }
 

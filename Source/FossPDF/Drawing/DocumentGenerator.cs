@@ -113,7 +113,7 @@ namespace FossPDF.Drawing
             RenderPass(pageContext, new FreeCanvas(), content, debuggingState);
 
             RenderPass(pageContext, canvas, content, debuggingState);
-            pageContext.FontManager.DisposeAll();
+            pageContext.FontManager.DisposeDocumentSpecificObjects();
 
             return pageContext.GetPageNumbers();
         }
