@@ -45,7 +45,7 @@ namespace FossPDF.Drawing
 
         public override void EndPage()
         {
-            using var picture = PictureRecorder?.EndRecording();
+            var picture = PictureRecorder?.EndRecording();
 
             if (picture != null && CurrentPageSize.HasValue)
                 Pictures.Add(new PreviewerPicture(picture, CurrentPageSize.Value));

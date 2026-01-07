@@ -67,7 +67,7 @@ namespace FossPDF.Drawing
 
         internal static ICollection<PreviewerPicture> GeneratePreviewerPictures(IDocument document)
         {
-            using var canvas = new SkiaPictureCanvas();
+            var canvas = new SkiaPictureCanvas();
             RenderDocument(canvas, document);
             return canvas.Pictures;
         }
