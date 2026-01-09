@@ -7,10 +7,15 @@ namespace FossPDF.Elements.Table
 
         internal float Width { get; set; }
 
-        public TableColumnDefinition(float constantSize, float relativeSize)
+        public bool AllowShrink { get; set; }
+        public bool AllowGrow { get; set; }
+
+        public TableColumnDefinition(float constantSize, float relativeSize, bool allowShrink, bool allowGrow)
         {
             ConstantSize = constantSize;
             RelativeSize = relativeSize;
+            AllowShrink = allowShrink;
+            AllowGrow = allowGrow;
         }
     }
 }

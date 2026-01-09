@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using FossPDF.Drawing.Exceptions;
 using FossPDF.Elements;
@@ -14,19 +12,19 @@ namespace FossPDF.Fluent
     {
         internal List<TableColumnDefinition> Columns { get; } = new();
         
-        public void ConstantColumn(float width, Unit unit = Unit.Point)
+        public void ConstantColumn(float width, Unit unit = Unit.Point, bool allowShrink = false, bool allowGrow = false)
         {
-            ComplexColumn(constantWidth: width.ToPoints(unit));
+            ComplexColumn(allowShrink, allowGrow, constantWidth: width.ToPoints(unit));
         }
         
-        public void RelativeColumn(float width = 1)
+        public void RelativeColumn(float width = 1, bool allowShrink = false, bool allowGrow = false)
         {
-            ComplexColumn(relativeWidth: width);
+            ComplexColumn(allowShrink, allowGrow, relativeWidth: width);
         }
-        
-        private void ComplexColumn(float constantWidth = 0, float relativeWidth = 0)
+
+        private void ComplexColumn(bool allowShrink, bool allowGrow, float constantWidth = 0, float relativeWidth = 0)
         {
-            var columnDefinition = new TableColumnDefinition(constantWidth, relativeWidth);
+            var columnDefinition = new TableColumnDefinition(constantWidth, relativeWidth, allowShrink, allowGrow);
             Columns.Add(columnDefinition);
         }
     }
@@ -50,8 +48,6 @@ namespace FossPDF.Fluent
     
     public class TableDescriptor
     {
-        internal List<TableColumnDefinition> Columns { get; private set; }
-
         private Table HeaderTable { get; } = new();
         private Table ContentTable { get; } = new();
         private Table FooterTable { get; } = new();
@@ -93,6 +89,25 @@ namespace FossPDF.Fluent
         internal IElement CreateElement()
         {
             var container = new Container();
+
+            List<TableCell> allTableCells = new();
+            var tables = new List<Table>() { HeaderTable, ContentTable, FooterTable };
+            foreach (var table in tables)
+            {
+                allTableCells.AddRange(table.Cells);
+                table.AfterUpdateColumnsWidth += (columnsWidth) =>
+                {
+                    foreach (var table in tables)
+                    {
+                        table.ColumnsWidth = columnsWidth;
+                    }
+                };
+            }
+
+            foreach (var table in tables)
+            {
+                table.AllCells = allTableCells;
+            }
 
             ConfigureTable(HeaderTable);
             ConfigureTable(ContentTable);
