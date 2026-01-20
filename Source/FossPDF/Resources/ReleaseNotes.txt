@@ -1,6 +1,8 @@
 Version 2026.1.1:
 
 - Update dependencies of previewer tool and ensure clients can connect to it
+- Fixes for when people aren't using font subsetting
+- Add a new glue package to make adopting subsetting much easier
 - Contributions from @Lure5134: Add option to get total page numbers (PDFs), add dynamic column width support
 
 Version 2025.7.2:
