@@ -15,7 +15,7 @@
         <PackageReference Include="SkiaSharp" Version="3.119.1"/>
         <PackageReference Include="Svg.Skia" Version="1.0.0.3"/>
         <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.1"/>
-        <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0"/>
+        <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.3"/>
     </ItemGroup>
 
     <ItemGroup>

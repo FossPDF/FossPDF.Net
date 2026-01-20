@@ -15,7 +15,7 @@
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
         <PackageReference Include="SkiaSharp" Version="3.119.1" />
-        <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0" />
+        <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.3" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.1" />
 
 
@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\FossPDF.FontSubset.Glue\FossPDF.FontSubset.Glue.csproj" />
       <ProjectReference Include="..\FossPDF.PlatformUtils\FossPDF.PlatformUtils.csproj" />
       <ProjectReference Include="..\FossPDF\FossPDF.csproj" />
     </ItemGroup>
