@@ -4,11 +4,17 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>2026.1.1</Version>
+        <Version>2026.5.1</Version>
+        <PackageReadmeFile>PackageReadme.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\FossPDF.FontSubset\FossPDF.FontSubset.csproj" />
         <ProjectReference Include="..\FossPDF\FossPDF.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Resources\PackageReadme.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>

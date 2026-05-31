@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FossPDF.FontSubset", "FossP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FossPDF.FontSubset.Glue", "FossPDF.FontSubset.Glue\FossPDF.FontSubset.Glue.csproj", "{B87F2159-6DDB-410A-B970-43021BA9B425}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FossPDF.InvoiceSample", "FossPDF.InvoiceSample\FossPDF.InvoiceSample.csproj", "{06FA036E-4889-47B1-BF0B-BE518CCA8F3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,5 +67,9 @@ Global
 		{B87F2159-6DDB-410A-B970-43021BA9B425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87F2159-6DDB-410A-B970-43021BA9B425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B87F2159-6DDB-410A-B970-43021BA9B425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06FA036E-4889-47B1-BF0B-BE518CCA8F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06FA036E-4889-47B1-BF0B-BE518CCA8F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06FA036E-4889-47B1-BF0B-BE518CCA8F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06FA036E-4889-47B1-BF0B-BE518CCA8F3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

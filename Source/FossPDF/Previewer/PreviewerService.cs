@@ -97,7 +97,7 @@ namespace FossPDF.Previewer
 
         private void CheckVersionCompatibility(Version version)
         {
-            if (version.Major == RequiredPreviewerVersionMajor && version.Minor == RequiredPreviewerVersionMinor)
+            if (version.Major == RequiredPreviewerVersionMajor && version.Minor >= RequiredPreviewerVersionMinor)
                 return;
 
             throw new Exception($"Previewer version is not compatible. Possible solutions: " +
